@@ -65,3 +65,9 @@ The source code is freely provided.
 You will need a relatively recent version of Python 3: https://www.python.org/
 
 If you want to see colors, the Colorama package will need to be installed: https://pypi.org/project/colorama/
+
+# Where to download
+
+You can either clone the Git repo or download the latest version in ZIP format.
+
+ZIP format download: https://github.com/KerfuffleV2/dhelper/archive/master.zip
