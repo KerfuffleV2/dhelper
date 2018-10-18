@@ -1,0 +1,7 @@
+*.cfg
+*.lst
+*.csv
+*.bak
+*~
+.gitconfig
+*/
