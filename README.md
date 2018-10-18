@@ -34,6 +34,18 @@ This is mostly useful for sealed. Given a pool of cards, it can show you average
 ##### Quarry example with cards:
 ![Quarry example by cost](https://raw.githubusercontent.com/KerfuffleV2/dhelper/assets/images/example-quarry-cost.png)
 
+### Interactive mode
+
+You can enter commands like entering draft or quarry mode without having to invoke the tool from the commandline each time.
+
+### Updates
+
+The tool can automatically download a variety of tier lists by using the `update` command.
+
+### Configurable
+
+Many settings such as which tier lists to use and the order they are considered are configurable. The default deck and quarry mode list files may also be set in the configuration file.
+
 ***
 
 # Who it is useful for
