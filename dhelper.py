@@ -288,7 +288,7 @@ class TierListSimple(TierList):
     ratingidx = self.cfg.getint('ratingcolumn') - 1
     tierdata = {}
     self.tl = tierdata
-    with open(fn, 'r') as fp:
+    with open(fn, 'r', encoding = 'utf-8') as fp:
       csvr = csv.reader(fp)
       for row in csvr:
         rowlen = len(row)
@@ -319,7 +319,7 @@ class TierListSunyveil(TierList):
     rc = self.rc
     tierdata = {}
     self.tl = tierdata
-    with open(fn, 'r') as fp:
+    with open(fn, 'r', encoding = 'utf-8') as fp:
       csvr = csv.reader(fp)
       for row in csvr:
         row = row[:6]
@@ -348,7 +348,7 @@ class TierListKonan(TierList):
     tierdata = {}
     self.tl = tierdata
     currtier = None
-    with open(fn, 'r') as fp:
+    with open(fn, 'r', encoding = 'utf-8') as fp:
       csvr = csv.reader(fp)
       for row in csvr:
         if len(row) != 1:
@@ -761,7 +761,7 @@ def loadTierLists():
 deckcardre = re.compile(r'^(\d+)\s+([^(]+\S)\s+(?:[(].*[)])\s*$')
 def loadDeckCards(fn, cards):
   deckcards = {}
-  with open(fn, 'r') as fp:
+  with open(fn, 'r', encoding = 'utf-8') as fp:
     for line in fp:
       line = line.strip()
       if line == '' or line[0] == '#' or line == '--------------MARKET---------------':
@@ -801,7 +801,7 @@ def mkFacStr(fcolors, *ccosts):
 def loadCards():
   fn = CFG['cards']['filename']
   cards = {}
-  with open(fn, 'r') as fp:
+  with open(fn, 'r', encoding = 'utf-8') as fp:
     csvr = csv.reader(fp)
     for row in csvr:
       if len(row) < 19 or row[0] == 'Reg':
@@ -1174,7 +1174,7 @@ def handleMakeConfig(pargs, fn = 'dhelper.cfg'):
   if os.path.exists(fn) and not pargs.merge:
     print('!! {0} already exists. Remove it if you want a new default config and then run this command again.'.format(fn))
     return
-  with open('dhelper.cfg', 'w') as fp:
+  with open('dhelper.cfg', 'w', encoding = 'utf-8') as fp:
     if pargs.merge:
       CFG.write(fp, space_around_delimiters = True)
     else:
