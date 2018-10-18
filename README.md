@@ -1,3 +1,6 @@
+# Use case
+
+This tool assists with drafting in the card game Eternal and also for evaluating the card pools in Sealed mode.
 
 # Features
 
