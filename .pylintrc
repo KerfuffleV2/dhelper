@@ -1,0 +1,5 @@
+[TYPECHECK]
+ignored-classes=Config
+
+[MESSAGES CONTROL]
+disable=attribute-defined-outside-init, C0326, W0311, C0103, C0111 , W0401, C410, C0330, C0301
