@@ -1,28 +1,25 @@
-import csv, re, sys, itertools, re, os.path, argparse, textwrap, shlex
-import collections
+import sys
 
 from .config import loadConfig
-from .util import *
 from .modes import getModeHandler
 from .args import parseArgs
 
 
 def main():
-  cfg = loadConfig()
-  presult = parseArgs(cfg)
+  loadConfig()
+  presult = parseArgs()
   handler = getModeHandler(presult.mode)
-  if handler is not None:
-    print('')
-    handler(presult)
-    print('')
-  else:
+  if handler is None:
     print('!! The impossible happened, no handler for args:', presult, file = sys.stderr)
     sys.exit(1)
-
-
-if __name__ == '__main__':
+  print('')
   try:
-    main()
+    handler(presult)
   except KeyboardInterrupt:
     print('\n\nExit requested from keyboard.')
     sys.exit(0)
+  print('')
+
+
+if __name__ == '__main__':
+  main()

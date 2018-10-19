@@ -1,23 +1,26 @@
-import shlex, csv, os, sys
-
-from .output import *
-from .args import *
-from .config import *
-from .stats import *
-from .filter import *
-from .lists import *
-from .deck import *
-from .util import *
-from .styling import *
-
 __all__ = ['getModeHandler']
+
+import shlex
+import csv
+import os
+import sys
+
+from .output import showTierList, showDeckByCost, mkRatingColor, mkRatingString, mkCardText
+from .args import parseArgs
+from .config import DEFAULTCONFIG, CFG
+from .stats import Stats
+from .filter import FILTERHELP, Filter, FilteredDeck
+from .lists import checkLists, loadRatedCards
+from .deck import loadDeckCards, mkDeckCard
+from .util import COLORCOMBOS
+from .styling import COLORCOLORS, cf
+
 
 
 try:
   import readline
 except ImportError:
   readline = None
-  pass
 
 
 def handleDeck(pargs):
@@ -42,7 +45,7 @@ def handleDeck(pargs):
 
 
 
-def handleDraft(pargs):
+def handleDraft(_pargs):
   cards = loadRatedCards()
   lccards = dict((k.lower(),k) for k in cards.keys())
   lckeys = list(lccards.keys())
@@ -75,7 +78,7 @@ def handleDraft(pargs):
     line = line.strip()
     if line == '':
       showTierList(deck)
-      if len(deck) > 0:
+      if deck:
         print('** Starting new set **')
       deck = {}
       continue
@@ -89,7 +92,7 @@ def handleDraft(pargs):
         break
       try:
         filt = Filter.fromString(line[1:])
-      except Exception as err:
+      except ValueError as err:
         print('! Error: Parsing filter failed: ', err)
         continue
       showTierList(deck, filt)
@@ -153,7 +156,7 @@ def handleInteract(_pargs):
       args = ['--help']
     elif args == ['quit']:
       break
-    elif len(args) == 0:
+    elif not args:
       args = ['deck']
     elif len(args) > 1 and args[1][0] != '-':
       args[1] = '-' + args[1]
@@ -184,7 +187,7 @@ def handleQuarry(pargs):
     if len(colors) > pargs.maxcolors:
       continue
     filtstr = 'c.n' + colors
-    if pargs.filter is not None and len(pargs.filter) > 0:
+    if pargs.filter:
       filtstr += ':' + pargs.filter
     filt = Filter.fromString(filtstr)
     fdeck = FilteredDeck.fromDeck(deckcards, filt)
@@ -237,7 +240,7 @@ def handleDumpTierList(_pargs):
   for card in cards.values():
     if card.sources:
       tr = card.rating
-      if tr is not None and type(tr) is float:
+      if tr is not None and isinstance(tr, float):
         otr = '{0:g}'.format(tr)
         ntr = '{0:.3f}'.format(tr)
         if len(ntr) < len(otr):

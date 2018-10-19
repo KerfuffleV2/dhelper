@@ -1,9 +1,10 @@
+__all__ = ['parseArgs']
+
 import sys, argparse, textwrap
 
 from .filter import FILTERHELP
 from .config import CFG
 
-__all__ = ['parseArgs']
 
 def parseArgs(args = None):
   cfg = CFG

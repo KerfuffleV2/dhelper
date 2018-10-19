@@ -15,7 +15,7 @@ try:
 except ImportError:
   class ColDummy(object):
     def __getattr__(self, key):
-      if key and type(key) is str and key[0] != '_':
+      if key and isinstance(key, str) and key[0] != '_':
         return ''
       raise AttributeError('ColDummy: Not here')
   Fore = ColDummy()
@@ -78,7 +78,7 @@ TYPECOLORS = {
 
 
 def mkRatingColor(rating):
-  if type(rating) is not float:
+  if not isinstance(rating, float):
     return ''
   if rating > 3.5:
     return cf('{b}{fgreen}')

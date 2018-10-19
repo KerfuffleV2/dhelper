@@ -1,6 +1,7 @@
+__all__ = ['DEFAULTCONFIG', 'Config', 'loadConfig']
+
 from configparser import ConfigParser
 
-__all__ = ['DEFAULTCONFIG', 'Config', 'loadConfig']
 
 DEFAULTCONFIG = """
 [version]

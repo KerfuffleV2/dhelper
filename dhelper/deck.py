@@ -1,6 +1,7 @@
+__all__ = ['DeckCard', 'mkDeckCard', 'loadDeckCards']
+
 import re
 
-__all__ = ['DeckCard', 'mkDeckCard', 'loadDeckCards']
 
 class DeckCard(object):
   def __init__(self, name, card, count = 1):

@@ -1,6 +1,7 @@
+__all__ = ['FILTERHELP', 'ColorFilter', 'Filter', 'FilteredDeck']
+
 from .util import FACTIONS
 
-__all__ = ['FILTERHELP', 'ColorFilter', 'Filter', 'FilteredDeck']
 
 FILTERHELP = '''\
 
@@ -48,7 +49,7 @@ class ColorFilter(object):
   @classmethod
   def fromString(cls, s):
     s = s.strip()
-    if len(s) == 0:
+    if not s:
       return cls()
     s = s.upper()
     fc = s[0]
@@ -105,7 +106,7 @@ class Filter(object):
   def __colorfiltf(self, card):
     if card is None:
       return False
-    if len(self.colorfilter) == 0:
+    if not self.colorfilter:
       return True
     for cfentry in self.colorfilter:
       if cfentry.test(card.creq):
@@ -121,7 +122,7 @@ class Filter(object):
       if costrange[0] > 0:
         return False
       return True
-    return (card.cost >= costrange[0] and card.cost <= costrange[1])
+    return card.cost >= costrange[0] and card.cost <= costrange[1]
 
 
   @classmethod

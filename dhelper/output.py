@@ -1,17 +1,17 @@
+__all__ = ['mkRatingString', 'mkCardText', 'showRatingList', 'showDeckByCost', 'showTierList']
+
 import itertools
 
 from .config import CFG
-from .filter import *
-from .util import *
-from .styling import *
-from .stats import *
+from .filter import Filter, FilteredDeck
+from .styling import RARITYCOLORS, COLORCOLORS, TYPECOLORS, mkRatingColor, cf
+from .stats import Stats
 
-__all__ = ['mkRatingString', 'mkCardText', 'showRatingList', 'showDeckByCost', 'showTierList']
 
 def mkRatingString(rating):
   if rating is None:
     return '?.??'
-  if type(rating) is not float:
+  if not isinstance(rating, float):
     return rating
   return '{0:1.2f}'.format(rating)
 
@@ -40,7 +40,6 @@ def mkCardText(deckcard, padlen = None, maxlen = None):
 
 # Color filter example: 'T,TJ,N'
 def showRatingList(deckcards, extratext = True, padding = ''):
-  from .stats import Stats
   ratingf = lambda dcard: dcard.card.rating
   srl = sorted(deckcards, key = ratingf, reverse = True)
   gsrl = itertools.groupby(srl, ratingf)
@@ -54,7 +53,7 @@ def showRatingList(deckcards, extratext = True, padding = ''):
     for i in range(0, len(g), CFG.output.perline):
       cardschunk = g[i:i + CFG.output.perline]
       showncount += sum(card.count for card in cardschunk)
-      if len(cardschunk) == 0:
+      if not cardschunk:
         continue
       shownchunk += 1
       items = ' | '.join(mkCardText(deckcard) for deckcard in cardschunk)
@@ -94,7 +93,7 @@ def showDeckByCost(deckcards, cardfilter = None, padding = ''):
 
 
 def showTierList(deck, cardfilter = None, extratext = True, padding = ''):
-  if len(deck) == 0:
+  if not deck:
     return
   if extratext:
     print('=' * 20, '\n')
@@ -105,5 +104,3 @@ def showTierList(deck, cardfilter = None, extratext = True, padding = ''):
   if extratext:
     print('=' * 20,'\n')
   return filtdeck
-
-

@@ -1,10 +1,15 @@
-import urllib, urllib.request, sys, os
+__all__ = ['loadRatedCards', 'checkLists']
+
+import urllib
+import urllib.request
+import urllib.error
+import sys
+import os
 
 from .config import CFG
 from .cards import loadCards
 from .tierlists import loadTierLists, RatedCards
 
-__all__ = ['loadRatedCards', 'checkLists']
 
 def getGDCSV(fn, key, pagegids, force = False):
   if not force and os.path.isfile(fn):
@@ -45,7 +50,7 @@ def checkLists(force = False):
       fn, csvi = (l.filename, (l.gdkey, l.gdgids))
       try:
         getGDCSV(fn, *csvi, force = force)
-      except Exception as err:
+      except (IOError, urllib.error.URLError) as err:
         print('!! Fetching or creating {0} failed. Error: {1}'.format(fn, err), file = sys.stderr)
         print('!! Bailing. :(', file = sys.stderr)
         sys.exit(1)

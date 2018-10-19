@@ -1,9 +1,10 @@
+__all__ = ['Card', 'mkFacStr', 'loadCards']
+
 import csv
 
 from .util import FACTIONS
 from .config import CFG
 
-__all__ = ['Card', 'mkFacStr', 'loadCards']
 
 class Card(object):
   def __init__(self, name, cost, creq, rarity, ctype = None, text = None, dam = None, life = None):
@@ -15,7 +16,6 @@ class Card(object):
     self.text = text
     self.dam = dam
     self.life = life
-
 
 
 def mkFacStr(fcolors, *ccosts):

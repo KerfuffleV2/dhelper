@@ -1,10 +1,11 @@
-import collections, csv
+__all__ = ['loadTierLists']
+
+import collections
+import csv
 
 from .config import CFG
 from .cards import Card
 from .util import FACTIONS, CRESTS
-
-__all__ = ['loadTierLists']
 
 
 class TierList(object):
