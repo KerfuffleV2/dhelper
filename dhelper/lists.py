@@ -5,19 +5,28 @@ import urllib.request
 import urllib.error
 import sys
 import os
+import time
 
 from .config import CFG
 from .cards import loadCards
 from .tierlists import loadTierLists, RatedCards
 
 
-def getGDCSV(fn, key, pagegids, force = False):
-  if not force and os.path.isfile(fn):
-    return
+_GDURIFORMAT = 'https://docs.google.com/spreadsheets/d/{key}/export?format=csv&gid={pagegid}'
+def getGDCSV(cfg, autoupdate = False, force = False):
+  fn = cfg.filename
+  if os.path.isfile(fn):
+    if autoupdate is not False:
+      now = time.time()
+      mtime = os.path.getmtime(fn)
+      age = now - mtime
+      if now - mtime < autoupdate and not force:
+        return
+    elif not force:
+      return
   datalist = []
-  for pagegid in pagegids:
-    urifmt = 'https://docs.google.com/spreadsheets/d/{key}/export?format=csv&gid={pagegid}'
-    uri = urifmt.format(key = key, pagegid = pagegid)
+  for pagegid in cfg.gdgids:
+    uri = _GDURIFORMAT.format(key = cfg.gdkey, pagegid = pagegid)
     print('** Fetching {fn} from: {uri}'.format(
       fn = fn, uri = uri))
     opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor())
@@ -47,9 +56,8 @@ def checkLists(force = False):
     stype = l.source
     fn = l.filename
     if stype == 'googledocs':
-      fn, csvi = (l.filename, (l.gdkey, l.gdgids))
       try:
-        getGDCSV(fn, *csvi, force = force)
+        getGDCSV(l, autoupdate = CFG.general.autoupdate, force = force)
       except (IOError, urllib.error.URLError) as err:
         print('!! Fetching or creating {0} failed. Error: {1}'.format(fn, err), file = sys.stderr)
         print('!! Bailing. :(', file = sys.stderr)

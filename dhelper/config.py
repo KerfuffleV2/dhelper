@@ -1,11 +1,15 @@
 __all__ = ['DEFAULTCONFIG', 'Config', 'loadConfig']
 
 from configparser import ConfigParser
-
+from .util import parseTime
 
 DEFAULTCONFIG = """
 [version]
 version = 20181012
+
+[general]
+# autoupdate may be "off" or a time specification in the format of <num><letter> where letter is one of s(econds), m(inutes), d(ays), (w)eeks. If not specified, the default is seconds.
+autoupdate = 1d
 
 [output]
 perline = 4
@@ -26,6 +30,7 @@ gdgids = 1980241403
 use = flashtdc_new sunyveil flash_old konan_old
 # Mode may be one of "first" or "average".
 mode = first
+
 
 [flashtdc_new]
 filename = tierlist_flashtdc.csv
@@ -118,6 +123,25 @@ def makeConfigModes(pcfg, cfg):
   qcfg.unknownscore = qunknownscore
 
 
+
+def makeConfigGeneral(pcfg, cfg):
+  sec = pcfg['general']
+  ncfg = Config()
+  cfg.general = ncfg
+  try:
+    autoupdate = sec.getboolean('autoupdate', fallback = '1d')
+    if autoupdate is True:
+      autoupdate = '1d'
+  except ValueError:
+    autoupdate = sec.get('autoupdate', '1d')
+  if autoupdate is False:
+    ncfg.autoupdate = False
+  else:
+    ncfg.autoupdate = parseTime(autoupdate)
+  return ncfg
+
+
+
 def mclHelper(sec, cfg):
     stype = sec.get('source', fallback = 'googledocs').lower()
     fn = sec['filename']
@@ -134,7 +158,7 @@ def mclHelper(sec, cfg):
 
 def makeConfigTierlists(pcfg, cfg):
   sec = pcfg['tierlists']
-  ncfg = Config(use = None, lists = None)
+  ncfg = Config()
   cfg.tierlists = ncfg
   mode = sec.get('mode', fallback = 'average').lower()
   if mode not in ('average', 'first'):
@@ -175,6 +199,7 @@ def loadConfig():
   pcfg.read(['dhelper.cfg'])
   CFG.pcfg = pcfg
   makeConfigOutput(pcfg, CFG)
+  makeConfigGeneral(pcfg, CFG)
   makeConfigModes(pcfg, CFG)
   makeConfigCards(pcfg, CFG)
   makeConfigTierlists(pcfg, CFG)
