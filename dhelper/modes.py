@@ -207,15 +207,19 @@ def handleQuarry(pargs):
       continue
     colorscores.append((stats.avgscore, prettycolors))
     print(cf('{padding}{colors}{d}:{r} {stats}', colors = prettycolors, padding = padding, stats = stats.pretty()))
+    if pargs.write:
+      fn = '{0}.{1}.lst'.format(CFG.modes.quarry.deck, colors)
+      with open(fn, 'w', encoding = 'utf-8') as fp:
+        for dc in fdeck.deck:
+          outstr = '{count} {name} (Set{setid} #{cardid})\n'.format(count = dc.count, name = dc.name, setid = dc.card.setid, cardid = dc.card.cardid)
+          fp.write(outstr)
     if pargs.expand or pargs.cost:
       if pargs.cost:
         showDeckByCost(deckcards, filtstr, padding = '    ')
       else:
         showTierList(deckcards, cardfilter = filt, extratext = False, padding = '    ')
         print()
-    colorscores.sort(key = lambda i: i[0], reverse = True)
-
-
+  colorscores.sort(key = lambda i: i[0], reverse = True)
   print('\nScore ranking:',
     cf(', '.join(
       cf('{r}{col}{r}{d}({b}{fwhite}{score:.2f}{r}{d}){r}', col = col, score = score)

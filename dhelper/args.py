@@ -60,6 +60,8 @@ def parseArgs(args = None):
     help = 'Will expand cards by cost. Implies --expand.')
   quarry_parser.add_argument('-f', '--filter', metavar = '<FILTER>', type = str, default = None,
     help = textwrap.dedent('NOTE: Specifying color filters will likely cause issues here.\n' + FILTERHELP))
+  quarry_parser.add_argument('-w', '--write', action = 'store_true', default = False,
+    help = 'Will write matching colors in deck format to <inputfile>.<COLOR>.lst. For example if the input was event.lst, it might create event.lst.TJP.lst.')
 
   update_parser = subparsers.add_parser('update', aliases = ['u'],
     help = 'Force update of cards.csv and tierlists')

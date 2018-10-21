@@ -13,24 +13,31 @@ from .tierlists import loadTierLists, RatedCards
 
 
 _GDURIFORMAT = 'https://docs.google.com/spreadsheets/d/{key}/export?format=csv&gid={pagegid}'
-def getGDCSV(cfg, autoupdate = False, force = False):
+def getCSV(cfg, autoupdate = False, force = False):
   fn = cfg.filename
   if os.path.isfile(fn):
     if autoupdate is not False:
       now = time.time()
       mtime = os.path.getmtime(fn)
       age = now - mtime
-      if now - mtime < autoupdate and not force:
+      if age < autoupdate and not force:
         return
     elif not force:
       return
+  if cfg.source == 'googledocs':
+    uris = tuple(_GDURIFORMAT.format(key = cfg.gdkey, pagegid = pagegid) for pagegid in cfg.gdgids)
+  elif cfg.source == 'uri':
+    uris = (cfg.uri,)
+  else:
+    raise ValueError('Unknown source type in getCSV')
   datalist = []
-  for pagegid in cfg.gdgids:
-    uri = _GDURIFORMAT.format(key = cfg.gdkey, pagegid = pagegid)
+  for uri in uris:
     print('** Fetching {fn} from: {uri}'.format(
       fn = fn, uri = uri))
     opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor())
-    resp = opener.open(uri)
+    ua = 'DHelper+urllib'
+    req = urllib.request.Request(uri, headers = {'User-Agent': ua })
+    resp = opener.open(req)
     data = resp.read()
     datalist.append(data)
   size = 0
@@ -52,12 +59,12 @@ def loadRatedCards():
 
 
 def checkLists(force = False):
-  for l in [CFG.cards] + CFG.tierlists.lists:
+  for l in [CFG.cards, CFG.cardids] + CFG.tierlists.lists:
     stype = l.source
     fn = l.filename
-    if stype == 'googledocs':
+    if stype == 'googledocs' or stype == 'uri':
       try:
-        getGDCSV(l, autoupdate = CFG.general.autoupdate, force = force)
+        getCSV(l, autoupdate = CFG.general.autoupdate, force = force)
       except (IOError, urllib.error.URLError) as err:
         print('!! Fetching or creating {0} failed. Error: {1}'.format(fn, err), file = sys.stderr)
         print('!! Bailing. :(', file = sys.stderr)

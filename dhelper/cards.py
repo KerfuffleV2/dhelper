@@ -7,12 +7,14 @@ from .config import CFG
 
 
 class Card(object):
-  def __init__(self, name, cost, creq, rarity, ctype = None, text = None, dam = None, life = None):
+  def __init__(self, name, cost, creq, rarity, setid, cardid, ctype = None, text = None, dam = None, life = None):
     self.name = name
     self.cost = cost
     self.creq = creq.upper()
     self.rarity = rarity
     self.ctype = ctype
+    self.setid = setid
+    self.cardid = cardid
     self.text = text
     self.dam = dam
     self.life = life
@@ -33,9 +35,13 @@ def mkFacStr(fcolors, *ccosts):
 
 
 def loadCards():
-  fn = CFG.cards.filename
+  cardids = {}
+  with open(CFG.cardids.filename, 'r', encoding = 'utf-8') as fp:
+    csvr = csv.reader(fp)
+    for setid, cardid, cardname in csvr:
+      cardids[cardname] = (setid, cardid)
   cards = {}
-  with open(fn, 'r', encoding = 'utf-8') as fp:
+  with open(CFG.cards.filename, 'r', encoding = 'utf-8') as fp:
     csvr = csv.reader(fp)
     for row in csvr:
       if len(row) < 19 or row[0] == 'Reg':
@@ -61,6 +67,11 @@ def loadCards():
         typ = 'Sigil'
       if typ == 'Power' or typ == 'Sigil':
         creq = FACTIONS.get(fac, creq)
-      cards[name] = Card(name, int(cost) if cost != '*' else '*', creq, rarity[0],
+      idresult = cardids.get(name)
+      if idresult is None:
+        # print('Cannot get cardid for card: ', name)
+        continue
+      setid, cardid = idresult
+      cards[name] = Card(name, int(cost) if cost != '*' else '*', creq, rarity[0], setid, cardid,
         ctype = typ, text = text, dam = dam, life = life)
   return cards

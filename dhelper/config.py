@@ -26,6 +26,14 @@ gdkey = 1PhhMm1hx1pBxvmmXg_sRMzmYiKv1RihVytyK-tJAK00
 # Space separated if the Google Document has multiple pages.
 gdgids = 1980241403
 
+[cardids]
+# Output filename
+filename = cardids.csv
+# Source can be "googledocs" (default) in which case gdkey and gdgids should be set or "local" to disable remote updates.
+source = uri
+uri = https://gist.githubusercontent.com/KerfuffleV2/3955d0146ceb4d4d604d8e6d55771886/raw/9845bf1eb5869cb0e6777e6fa477da813d6a9974/cardids.csv
+
+
 [tierlists]
 use = flashtdc_new sunyveil flash_old konan_old
 # Mode may be one of "first" or "average".
@@ -150,6 +158,8 @@ def mclHelper(sec, cfg):
       cfg.gdgids = sec.get('gdgids', fallback = '0').split(None)
     elif stype == 'local':
       pass
+    elif stype == 'uri':
+      cfg.uri = sec['uri']
     else:
       raise ValueError('Bad source type in tierlist/cards section')
     cfg.source = stype
@@ -193,6 +203,14 @@ def makeConfigCards(pcfg, cfg):
   mclHelper(sec, ncfg)
 
 
+def makeConfigCardIds(pcfg, cfg):
+  sec = pcfg['cardids']
+  ncfg = Config()
+  ncfg.name = 'cardids'
+  cfg.cardids = ncfg
+  mclHelper(sec, ncfg)
+
+
 def loadConfig():
   pcfg = ConfigParser(empty_lines_in_values = False)
   pcfg.read_string(DEFAULTCONFIG)
@@ -202,4 +220,5 @@ def loadConfig():
   makeConfigGeneral(pcfg, CFG)
   makeConfigModes(pcfg, CFG)
   makeConfigCards(pcfg, CFG)
+  makeConfigCardIds(pcfg, CFG)
   makeConfigTierlists(pcfg, CFG)

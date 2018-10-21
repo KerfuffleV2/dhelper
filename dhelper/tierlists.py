@@ -180,7 +180,7 @@ class TierLists(object):
 class RatedCard(Card):
   @classmethod
   def fromCard(cls, card, rating, sources):
-    return cls(card.name, card.cost, card.creq, card.rarity, card.ctype, card.text, card.dam, card.life,
+    return cls(card.name, card.cost, card.creq, card.rarity, card.setid, card.cardid, card.ctype, card.text, card.dam, card.life,
       rating = rating, sources = sources)
 
   def __init__(self, *args, rating = None, sources = None, **kwargs):
