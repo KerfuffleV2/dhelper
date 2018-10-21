@@ -183,6 +183,7 @@ def handleQuarry(pargs):
   deckcards = loadDeckCards(deckfn, cards)
   seen = set()
   colorscores = []
+  fileswritten = []
   for colors in COLORCOMBOS:
     if len(colors) > pargs.maxcolors:
       continue
@@ -209,6 +210,7 @@ def handleQuarry(pargs):
     print(cf('{padding}{colors}{d}:{r} {stats}', colors = prettycolors, padding = padding, stats = stats.pretty()))
     if pargs.write:
       fn = '{0}.{1}.lst'.format(CFG.modes.quarry.deck, colors)
+      fileswritten.append(fn)
       with open(fn, 'w', encoding = 'utf-8') as fp:
         for dc in fdeck.deck:
           outstr = '{count} {name} (Set{setid} #{cardid})\n'.format(count = dc.count, name = dc.name, setid = dc.card.setid, cardid = dc.card.cardid)
@@ -224,6 +226,8 @@ def handleQuarry(pargs):
     cf(', '.join(
       cf('{r}{col}{r}{d}({b}{fwhite}{score:.2f}{r}{d}){r}', col = col, score = score)
       for score,col in colorscores)))
+  if fileswritten:
+    print('\nCreated files: {0}'.format(', '.join(repr(fn) for fn in fileswritten)))
 
 
 def handleMakeConfig(pargs, fn = 'dhelper.cfg'):
