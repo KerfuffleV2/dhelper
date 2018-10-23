@@ -52,17 +52,6 @@ def loadRatedCards():
   checkLists()
   cards = loadCards()
   tls = loadTierLists()
-  import string
-  def isl(s):
-    return all(c in "&',- " or c in string.ascii_letters for c in s)
-  def showflib(cs, n):
-    for cardname in cs:
-      if isl(cardname):
-        continue
-      print(cardname)
-  showflib(cards, 'cards')
-  for tl in tls.tls.values():
-    showflib(tl.tl, 'a')
   tlmode = CFG.tierlists.mode
   avg = tlmode == 'average'
   return RatedCards(cards, tls, avg = avg)
