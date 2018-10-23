@@ -21,6 +21,9 @@ def parseArgs(args = None):
   deck_parser.add_argument('-d', '--deck', metavar = '<DECKNAME>', type = str,
     default = cfg.modes.deck.deck,
     help = 'Deck file, exported from Eternal (default deck.csv)')
+  deck_parser.add_argument('-w', '--write', metavar = '<FILENAME>', type = str,
+    default = None,
+    help = 'Save the filtered cards in Eternal deck format')
   dmegroup = deck_parser.add_mutually_exclusive_group()
   dmegroup.add_argument('-f', '--filter', metavar = '<FILTER>', type = str, default = None,
     help = textwrap.dedent(FILTERHELP))

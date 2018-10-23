@@ -11,7 +11,7 @@ from .config import DEFAULTCONFIG, CFG
 from .stats import Stats
 from .filter import FILTERHELP, Filter, FilteredDeck
 from .lists import checkLists, loadRatedCards
-from .deck import loadDeckCards, mkDeckCard
+from .deck import DeckCard, loadDeckCards, saveDeckCards
 from .util import COLORCOMBOS
 from .styling import COLORCOLORS, cf
 
@@ -38,10 +38,17 @@ def handleDeck(pargs):
   print('Loading deck: {0}'.format(deckfn))
   deckcards = loadDeckCards(deckfn, cards)
   if not costmode:
-    showTierList(deckcards, filt)
+    fdeck = showTierList(deckcards, filt)
   else:
     showDeckByCost(deckcards)
-    print('***  Summary: ', Stats(FilteredDeck.fromDeck(deckcards)).pretty())
+    fdeck = FilteredDeck.fromDeck(deckcards)
+    print('***  Summary: ', Stats(fdeck).pretty())
+  if pargs.write:
+    if pargs.write == deckfn:
+      print('!! Cannot write to the same file as input.')
+      return
+    saveDeckCards(pargs.write, fdeck.deck)
+    print('\nSaved file:', pargs.write)
 
 
 
@@ -115,7 +122,7 @@ def handleDraft(_pargs):
     if cardname is None:
       print('Unknown:', line)
       continue
-    deckcard = mkDeckCard(cardname, cards)
+    deckcard = DeckCard.mk(cardname, cards)
     if deckcard is None:
       print('Unknown card:', cardname)
     else:
@@ -211,10 +218,7 @@ def handleQuarry(pargs):
     if pargs.write:
       fn = '{0}.{1}.lst'.format(CFG.modes.quarry.deck, colors)
       fileswritten.append(fn)
-      with open(fn, 'w', encoding = 'utf-8') as fp:
-        for dc in fdeck.deck:
-          outstr = '{count} {name} (Set{setid} #{cardid})\n'.format(count = dc.count, name = dc.name, setid = dc.card.setid, cardid = dc.card.cardid)
-          fp.write(outstr)
+      saveDeckCards(fn, fdeck.deck)
     if pargs.expand or pargs.cost:
       if pargs.cost:
         showDeckByCost(deckcards, filtstr, padding = '    ')
