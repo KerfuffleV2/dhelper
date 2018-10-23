@@ -71,3 +71,7 @@ If you want to see colors, the Colorama package will need to be installed: https
 You can either clone the Git repo or download the latest version in ZIP format.
 
 ZIP format download: https://github.com/KerfuffleV2/dhelper/archive/master.zip
+
+# Credits
+
+This application would be useless without the tier lists and data people have taken the time to create and make available. The list of card ids was derived from data EternalWarCry.com provides. Thank you to those people and organizations!
