@@ -1,6 +1,7 @@
 __all__ = ['DeckCard', 'mkDeckCard', 'loadDeckCards']
 
 import re
+from .util import fixCardName
 
 
 class DeckCard(object):
@@ -31,6 +32,7 @@ def loadDeckCards(fn, cards):
         print('Unknown:',line)
         continue
       count,cardname = result.groups()
+      cardname = fixCardName(cardname)
       count = int(count)
       deckcard = deckcards.get(cardname)
       if deckcard is None:

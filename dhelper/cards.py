@@ -2,7 +2,7 @@ __all__ = ['Card', 'mkFacStr', 'loadCards']
 
 import csv
 
-from .util import FACTIONS
+from .util import FACTIONS, fixCardName
 from .config import CFG
 
 
@@ -47,7 +47,7 @@ def loadCards():
       if len(row) < 19 or row[0] == 'Reg':
         continue
       _reg,_prem,_cset,fac,typ,styp,name,rarity,cost,c1,c2,c3,c4,c5,dam,life,text,_rel,_upd = row
-      name = name.strip()
+      name = fixCardName(name.strip())
       if name == 'Talon Drive':
         name = 'Talon Dive'
       if fac != 'Multi':

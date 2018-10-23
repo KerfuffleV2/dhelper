@@ -1,4 +1,4 @@
-__all__ = ['FACTIONS', 'CTOFACTION', 'CRESTS', 'COLORCOMBOS', 'TYPES', 'parseTime']
+__all__ = ['FACTIONS', 'CTOFACTION', 'CRESTS', 'COLORCOMBOS', 'TYPES', 'parseTime', 'fixCardName']
 
 import string
 
@@ -58,3 +58,7 @@ def parseTime(s):
       raise ValueError('Bad time format')
     secsum += int(tp[:-1]) * mult
   return secsum
+
+
+def fixCardName(s):
+  return s.replace("’", "'")

@@ -5,7 +5,7 @@ import csv
 
 from .config import CFG
 from .cards import Card
-from .util import FACTIONS, CRESTS
+from .util import FACTIONS, CRESTS, fixCardName
 
 
 class TierList(object):
@@ -15,6 +15,7 @@ class TierList(object):
     self.tl = {}
 
   def expandName(self, n):
+    n = fixCardName(n)
     nameparts = n.lower().split(None, 1)
     expandfac = lambda fmt: tuple(fmt.format(s) for s,c in FACTIONS.items() if len(c) > 1)
     if len(nameparts) == 1:
