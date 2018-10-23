@@ -181,7 +181,7 @@ class TierLists(object):
       tc = tl.get(name)
       if tc is not None:
         matched.append((tc, tl))
-    if len(matched) == 0:
+    if not matched:
       return None
     avgresult = sum(tc.rating for tc,_ in matched) / len(matched)
     sources = list(tl for _,tl in matched)

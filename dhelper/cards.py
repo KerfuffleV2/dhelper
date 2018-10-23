@@ -29,7 +29,7 @@ def mkFacStr(fcolors, *ccosts):
       break
     cost = int(ccosts[idx])
     result.append(fcolors[idx] * cost)
-  if len(result) == 0:
+  if not result:
     return 'N'
   return ''.join(result)
 

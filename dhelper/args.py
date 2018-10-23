@@ -1,6 +1,8 @@
 __all__ = ['parseArgs']
 
-import sys, argparse, textwrap
+import sys
+import argparse
+import textwrap
 
 from .filter import FILTERHELP
 from .config import CFG
@@ -81,4 +83,3 @@ def parseArgs(args = None):
   if argslen == 0:
     args = ['interact']
   return parser.parse_args(args)
-

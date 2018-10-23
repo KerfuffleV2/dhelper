@@ -44,4 +44,3 @@ def loadDeckCards(fn, cards):
         deckcard.count += count
       deckcards[cardname] = deckcard
   return deckcards
-
