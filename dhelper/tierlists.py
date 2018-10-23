@@ -130,10 +130,20 @@ class TierListKonan(TierList):
         if currtier is None:
           print('!! Got entry with no tier value set. Bailing!')
           return None
+        nextrowval = None
+        if rowval[-1] in '-+':
+          nextrowval = rowval[-2:]
+          rowval = rowval[:-2].strip()
         name = rowval
         names = self.expandName(name)
         for currname in names:
           tierdata[currname] = TierCard(currname, currtier)
+        if nextrowval is not None:
+          currtier = rc.get(nextrowval)
+          if currtier is None:
+            print('!! Unknown tier value:', rowval)
+          nextrowval = None
+
 
 
 class TierLists(object):
