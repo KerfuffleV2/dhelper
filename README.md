@@ -1,3 +1,9 @@
+# NO LONGER MAINTAINED
+
+Unfortunately, I don't play Eternal currently and I haven't had the time to maintain this project. The source remains for if anyone wants to learn from it or modify it themselves to work with the current version and tier lists.
+
+***
+
 # Use case
 
 This tool assists with drafting in the card game Eternal and also for evaluating the card pools in Sealed mode.
